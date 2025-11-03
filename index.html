@@ -18,12 +18,11 @@
     }
     canvas{
       position:absolute;
-      top:50%;
-      left:50%;
-      transform:translate(-50%, -50%);
-      width:calc(100% + 12px);
-      height:calc(100% + 12px);
+      top:0;
+      left:0;
       display:block;
+      width:100vw;
+      height:100vh;
     }
     .overlay{
       position:absolute;
@@ -58,7 +57,7 @@
       to{opacity:1;filter:blur(0);}
     }
     h1 { font-size: 2rem; }
-    a { color:rgb(200, 200, 200);; text-decoration: underline; }
+    a { color:rgb(200, 200, 200); text-decoration: underline; }
     p { font-size: 1.2rem; font-weight: bold; }
   </style>
 </head>
@@ -78,8 +77,20 @@
   <script>
     const canvas = document.getElementById('glCanvas');
     const gl = canvas.getContext('webgl', { premultipliedAlpha: false });
-    if(!gl){ alert('WebGL not supported.'); }
 
+    // Removed alert for WebGL fallback
+
+    function resize(){
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      gl.viewport(0,0,gl.drawingBufferWidth,gl.drawingBufferHeight);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+
+    // --- Shader code and setup ---
     const vsSource = `
       attribute vec2 a_position;
       varying vec2 v_uv;
@@ -184,15 +195,6 @@
       }
     }
     randomize();
-
-    function resize(){
-      const dpr=Math.min(window.devicePixelRatio||1,2);
-      canvas.width=(window.innerWidth+12)*dpr;
-      canvas.height=(window.innerHeight+12)*dpr;
-      gl.viewport(0,0,gl.drawingBufferWidth,gl.drawingBufferHeight);
-    }
-    window.addEventListener('resize',resize);
-    resize();
 
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
