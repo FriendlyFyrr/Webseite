@@ -78,8 +78,6 @@
     const canvas = document.getElementById('glCanvas');
     const gl = canvas.getContext('webgl', { premultipliedAlpha: false });
 
-    // Removed alert for WebGL fallback
-
     function resize(){
       const dpr = window.devicePixelRatio || 1;
       canvas.width = window.innerWidth * dpr;
@@ -90,7 +88,6 @@
     window.addEventListener('resize', resize);
     resize();
 
-    // --- Shader code and setup ---
     const vsSource = `
       attribute vec2 a_position;
       varying vec2 v_uv;
@@ -267,3 +264,4 @@
   </script>
 </body>
 </html>
+
