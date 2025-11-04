@@ -4,64 +4,69 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>.</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
   <style>
-    html,body{
-      margin:0;
-      height:100%;
-      background:#000;
-      overflow:hidden;
-      font-family:sans-serif;
-      color:white;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      overflow:hidden;
+    :root {
+      --vh: 1vh;
     }
-    canvas{
-      position:absolute;
-      top:50%;
-      left:50%;
-      transform:translate(-50%, -50%);
-      width:calc(100% + 12px);
-      height:calc(100% + 12px);
-      display:block;
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: calc(var(--vh, 1vh) * 100);
+      overflow: hidden;
+      position: fixed;
+      inset: 0;
+      background: #000;
+      font-family: sans-serif;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .overlay{
-      position:absolute;
-      top:50%;
-      left:50%;
-      transform:translate(-50%,-50%);
-      padding:2rem 3rem;
-      background:rgba(255,255,255,0.15);
-      border-radius:1rem;
-      backdrop-filter:blur(12px) saturate(150%);
-      -webkit-backdrop-filter:blur(12px) saturate(150%);
-      box-shadow:0 0 40px rgba(200,200,200,0.1);
-      text-align:center;
-      width:max-content;
-      max-width:600px;
-      max-height:calc(100vh - 4rem);
-      overflow:auto;
+    canvas {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: calc(100% + 20%);
+      height: calc(100% + 20%);
+      display: block;
     }
-    .decrypting span{
-      opacity:0;
-      animation:reveal 0.2s forwards;
+    .overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 2rem 3rem;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 1rem;
+      backdrop-filter: blur(12px) saturate(150%);
+      -webkit-backdrop-filter: blur(12px) saturate(150%);
+      box-shadow: 0 0 40px rgba(200, 200, 200, 0.1);
+      text-align: center;
+      width: max-content;
+      max-width: 600px;
+      max-height: calc(100vh - 4rem);
+      overflow: auto;
     }
-    .inhalt{
+    .decrypting span {
+      opacity: 0;
+      animation: reveal 0.2s forwards;
+    }
+    .inhalt {
       text-align: left;
     }
-    .personal_content{
+    .personal_content {
       align-self: center;
       justify-self: center;
     }
-    @keyframes reveal{
-      from{opacity:0;filter:blur(4px);}
-      to{opacity:1;filter:blur(0);}
+    @keyframes reveal {
+      from { opacity: 0; filter: blur(4px); }
+      to { opacity: 1; filter: blur(0); }
     }
     h1 { font-size: 2rem; }
-    a { color:white; text-decoration: underline; }
+    a { color: white; text-decoration: underline; }
     p { font-size: 1.2rem; font-weight: bold; }
   </style>
 </head>
@@ -71,14 +76,18 @@
   <div class="overlay">
     <h1 id="title"></h1>
     <div class="personal_content">
-      <p class="inhalt">
-        Computer & Design
-      </p>
+      <p class="inhalt">Computer & Design</p>
     </div>
     <p id="email"></p>
   </div>
 
   <script>
+    function setVh() {
+      document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+    }
+    window.addEventListener('resize', setVh);
+    setVh();
+
     const canvas = document.getElementById('glCanvas');
     const gl = canvas.getContext('webgl');
     if(!gl){ alert('WebGL not supported.'); }
@@ -140,9 +149,10 @@
 
     function resize(){
       const dpr = window.devicePixelRatio || 1;
-      canvas.width = window.innerWidth * dpr;
-      canvas.height = window.innerHeight * dpr;
-      gl.viewport(0,0,gl.drawingBufferWidth,gl.drawingBufferHeight);
+      const extra = 0.2;
+      canvas.width = window.innerWidth * (1 + extra) * dpr;
+      canvas.height = window.innerHeight * (1 + extra) * dpr;
+      gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     }
 
     window.addEventListener('resize', resize);
@@ -194,6 +204,3 @@
   </script>
 </body>
 </html>
-
-
-
